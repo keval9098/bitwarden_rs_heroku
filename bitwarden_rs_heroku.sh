@@ -39,11 +39,12 @@ function heroku_bootstrap {
     if [ "${HEROKU_VERIFIED}" -eq "1" ]
     then
         echo "We will use JawsDB Maria edition, which is free and sufficient for a small instance"
-        heroku addons:create jawsdb -a "$APP_NAME"
+        heroku addons:create heroku-postgresql:hobby-dev -a "$APP_NAME"
+        
 
         echo "Now we use the JAWS DB config as the database URL for Bitwarden"
         echo "Supressing output due to sensitive nature."
-        heroku config:set DATABASE_URL="$(heroku config:get JAWSDB_URL -a "${APP_NAME}")" -a "${APP_NAME}" > /dev/null
+        heroku config:set DATABASE_URL="$(heroku config:get DATABASE_URL -a "${APP_NAME}")" -a "${APP_NAME}" > /dev/null
     else
         heroku config:set DATABASE_URL="${OFFSITE_HEROKU_DB}" -a "${APP_NAME}" > /dev/null
     fi
